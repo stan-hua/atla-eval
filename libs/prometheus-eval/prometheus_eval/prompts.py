@@ -1,141 +1,180 @@
-ABS_SYSTEM_PROMPT = "You are a fair judge assistant tasked with providing clear, objective feedback based on specific criteria, ensuring each assessment reflects the absolute standards set for performance."
-REL_SYSTEM_PROMPT = "You are a fair judge assistant assigned to deliver insightful feedback that compares individual performances, highlighting how each stands relative to others within the same cohort."
+ABS_SYSTEM_PROMPT = None
+REL_SYSTEM_PROMPT = None
+
+# HACK: Atla does not use system prompts
+# ABS_SYSTEM_PROMPT = "You are a fair judge assistant tasked with providing clear, objective feedback based on specific criteria, ensuring each assessment reflects the absolute standards set for performance."
+# REL_SYSTEM_PROMPT = "You are a fair judge assistant assigned to deliver insightful feedback that compares individual performances, highlighting how each stands relative to others within the same cohort."
 
 
-ABSOLUTE_PROMPT = """###Task Description:
-An instruction (might include an Input inside it), a response to evaluate, a reference answer that gets a score of 5, and a score rubric representing a evaluation criteria are given.
-1. Write a detailed feedback that assess the quality of the response strictly based on the given score rubric, not evaluating in general.
-2. After writing a feedback, write a score that is an integer between 1 and 5. You should refer to the score rubric.
-3. The output format should look as follows: "(write a feedback for criteria) [RESULT] (an integer number between 1 and 5)"
-4. Please do not generate any other opening, closing, and explanations.
+ABSOLUTE_PROMPT = """You are tasked with evaluating a response based on a given instruction (which may contain an Input) and a scoring rubric and reference answer that serve as the evaluation standard. Provide a comprehensive feedback on the response quality strictly adhering to the scoring rubric, without any general evaluation. Follow this with a score between 1 and 5, referring to the scoring rubric. Avoid generating any additional opening, closing, or explanations.
 
-###The instruction to evaluate:
+Here are some rules of the evaluation:
+(1) You should prioritize evaluating whether the response satisfies the provided rubric. The basis of your score should depend exactly on the rubric. However, the response does not need to explicitly address points raised in the rubric. Rather, evaluate the response based on the criteria outlined in the rubric.
+(2) You should refer to the provided reference answer as a guide for evaluating the response.
+
+Your reply should strictly follow this format:
+**Reasoning:** <Your feedback>
+
+**Result:** <an integer between 1 and 5>
+
+Here is the data:
+
+Instruction:
+```
 {instruction}
+```
 
-###Response to evaluate:
+Response:
+```
 {response}
+```
 
-###Reference Answer (Score 5):
-{reference_answer}
-
-###Score Rubrics:
+Score Rubrics:
 {rubric}
 
-###Feedback: """
+Reference answer:
+{reference_answer}"""
 
 
-ABSOLUTE_PROMPT_WO_REF = """###Task Description:
-An instruction (might include an Input inside it), a response to evaluate, and a score rubric representing a evaluation criteria are given.
-1. Write a detailed feedback that assess the quality of the response strictly based on the given score rubric, not evaluating in general.
-2. After writing a feedback, write a score that is an integer between 1 and 5. You should refer to the score rubric.
-3. The output format should look as follows: "(write a feedback for criteria) [RESULT] (an integer number between 1 and 5)"
-4. Please do not generate any other opening, closing, and explanations.
+ABSOLUTE_PROMPT_WO_REF = """You are tasked with evaluating a response based on a given instruction (which may contain an Input) and a scoring rubric that serve as the evaluation standard. Provide a comprehensive feedback on the response quality strictly adhering to the scoring rubric, without any general evaluation. Follow this with a score between 1 and 5, referring to the scoring rubric. Avoid generating any additional opening, closing, or explanations.
 
-###The instruction to evaluate:
+Here are some rules of the evaluation:
+(1) You should prioritize evaluating whether the response satisfies the provided rubric. The basis of your score should depend exactly on the rubric. However, the response does not need to explicitly address points raised in the rubric. Rather, evaluate the response based on the criteria outlined in the rubric.
+
+Your reply should strictly follow this format:
+**Reasoning:** <Your feedback>
+
+**Result:** <an integer between 1 and 5>
+
+Here is the data:
+
+Instruction:
+```
 {instruction}
+```
 
-###Response to evaluate:
+Response:
+```
 {response}
+```
 
-###Score Rubrics:
-{rubric}
-
-###Feedback: """
+Score Rubrics:
+{rubric}"""
 
 
-RELATIVE_PROMPT = """###Task Description:
-An instruction (might include an Input inside it), two responses to evaluate (denoted as Response A and Response B), a reference answer, and an evaluation criteria are given.
-1. Write a detailed feedback that assess the quality of the two responses strictly based on the given evaluation criteria, not evaluating in general.
-2. Make comparisons between Response A, Response B, and the Reference Answer. Instead of examining Response A and Response B separately, go straight to the point and mention about the commonalities and differences between them.
-3. After writing the feedback, indicate the better response, either "A" or "B".
-4. The output format should look as follows: "Feedback: (write a feedback for criteria) [RESULT] (Either "A" or "B")"
-5. Please do not generate any other opening, closing, and explanations.
+# HACK: This doesn't exist for Atla
+RELATIVE_PROMPT = None
+# RELATIVE_PROMPT = """###Task Description:
+# An instruction (might include an Input inside it), two responses to evaluate (denoted as Response A and Response B), a reference answer, and an evaluation criteria are given.
+# 1. Write a detailed feedback that assess the quality of the two responses strictly based on the given evaluation criteria, not evaluating in general.
+# 2. Make comparisons between Response A, Response B, and the Reference Answer. Instead of examining Response A and Response B separately, go straight to the point and mention about the commonalities and differences between them.
+# 3. After writing the feedback, indicate the better response, either "A" or "B".
+# 4. The output format should look as follows: "Feedback: (write a feedback for criteria) [RESULT] (Either "A" or "B")"
+# 5. Please do not generate any other opening, closing, and explanations.
 
-###Instruction:
+# ###Instruction:
+# {instruction}
+
+# ###Response A:
+# {response_A}
+
+# ###Response B:
+# {response_B}
+
+# ###Reference Answer:
+# {reference_answer}
+
+# ###Score Rubric:
+# {rubric}
+
+# ###Feedback: """
+
+RELATIVE_PROMPT_WO_REF = """You are a helpful assistant in evaluating the quality of the responses for a given instruction. Your goal is to select the best response for the given instruction.
+Select Response A or Response B, that is better for the given instruction. The two responses are generated by two different AI chatbots respectively.
+Do NOT say both / neither are good.
+
+Here are some rules of the evaluation:
+(1) You should prioritize evaluating whether the response satisfies the provided rubric. Then consider its helpfulness, accuracy, level of detail, harmlessness, etc.
+(2) Responses should NOT contain more/less than what the instruction asks for, as such responses do NOT precisely execute the instruction.
+(3) You should avoid any potential bias and your judgment should be as objective as possible. Here are some potential sources of bias:
+- The order in which the responses were presented should NOT affect your judgment, as Response A and Response B are **equally likely** to be the better.
+- The length of the responses should NOT affect your judgement, as a longer response does not necessarily correspond to a better response. When making your decision, evaluate if the response length is appropriate for the given instruction.
+
+Your reply should strictly follow this format:
+**Reasoning:** <feedback evaluating the responses>
+
+**Result:** <A or B>
+
+Here is the data.
+
+Instruction:
+```
 {instruction}
+```
 
-###Response A:
+Response A:
+```
 {response_A}
+```
 
-###Response B:
+Response B:
+```
 {response_B}
+```
 
-###Reference Answer:
-{reference_answer}
-
-###Score Rubric:
-{rubric}
-
-###Feedback: """
+Score Rubrics:
+{rubric}"""
 
 
-RELATIVE_PROMPT_WO_REF = """###Task Description:
-An instruction (might include an Input inside it), two responses to evaluate (denoted as Response A and Response B), and an evaluation criteria are given.
-1. Write a detailed feedback that assess the quality of the two responses strictly based on the given evaluation criteria, not evaluating in general.
-2. Make comparisons between Response A, Response B, and the Reference Answer. Instead of examining Response A and Response B separately, go straight to the point and mention about the commonalities and differences between them.
-3. After writing the feedback, indicate the better response, either "A" or "B".
-4. The output format should look as follows: "Feedback: (write a feedback for criteria) [RESULT] (Either "A" or "B")"
-5. Please do not generate any other opening, closing, and explanations.
+# HACK: This doesn't exist for Atla
+ABSOLUTE_PROMPT_WO_REF_RAG = None
+# ABSOLUTE_PROMPT_WO_REF_RAG = """###Task Description:
+# An instruction (might include an Input inside it), a response to evaluate, a relevant context to support the evaluation (denoted as Relevant Context), and a score rubric representing a evaluation criteria are given.
+# 1. Write a detailed feedback that assess the quality of the response strictly based on the given score rubric, not evaluating in general. Refer to the given context when writing the feedback and making an assessment.
+# 2. After writing a feedback, write a score that is an integer between 1 and 5. You should refer to the score rubric.
+# 3. The output format should look as follows: "(write a feedback for criteria) [RESULT] (an integer number between 1 and 5)"
+# 4. Please do not generate any other opening, closing, and explanations.
 
-###Instruction:
-{instruction}
+# ###The instruction to evaluate:
+# {instruction}
 
-###Response A:
-{response_A}
+# ###Response to evaluate:
+# {response}
 
-###Response B:
-{response_B}
+# ###Relevant Context:
+# {relevant_context}
 
-###Score Rubric:
-{rubric}
+# ###Score Rubrics:
+# {rubric}
 
-###Feedback: """
+# ###Feedback: """
 
-ABSOLUTE_PROMPT_WO_REF_RAG = """###Task Description:
-An instruction (might include an Input inside it), a response to evaluate, a relevant context to support the evaluation (denoted as Relevant Context), and a score rubric representing a evaluation criteria are given.
-1. Write a detailed feedback that assess the quality of the response strictly based on the given score rubric, not evaluating in general. Refer to the given context when writing the feedback and making an assessment.
-2. After writing a feedback, write a score that is an integer between 1 and 5. You should refer to the score rubric.
-3. The output format should look as follows: "(write a feedback for criteria) [RESULT] (an integer number between 1 and 5)"
-4. Please do not generate any other opening, closing, and explanations.
+# HACK: This doesn't exist for Atla
+RELATIVE_PROMPT_WO_REF_RAG = None
+# RELATIVE_PROMPT_WO_REF_RAG = """###Task Description:
+# An instruction (might include an Input inside it), two responses to evaluate (denoted as Response A and Response B), a relevant context to support the evaluation (denoted as Relevant Context), and an evaluation criteria are given.
+# 1. Write a detailed feedback that assess the quality of the two responses strictly based on the given evaluation criteria, not evaluating in general. Refer to the given context when writing the feedback and making an assessment.
+# 2. Make comparisons between Response A, Response B, and the Reference Answer. Instead of examining Response A and Response B separately, go straight to the point and mention about the commonalities and differences between them.
+# 3. After writing the feedback, indicate the better response, either "A" or "B".
+# 4. The output format should look as follows: "Feedback: (write a feedback for criteria) [RESULT] (Either "A" or "B")"
+# 5. Please do not generate any other opening, closing, and explanations.
 
-###The instruction to evaluate:
-{instruction}
+# ###Instruction:
+# {instruction}
 
-###Response to evaluate:
-{response}
+# ###Response A:
+# {response_A}
 
-###Relevant Context:
-{relevant_context}
+# ###Response B:
+# {response_B}
 
-###Score Rubrics:
-{rubric}
+# ###Relevant Context:
+# {relevant_context}
 
-###Feedback: """
+# ###Score Rubric:
+# {rubric}
 
-RELATIVE_PROMPT_WO_REF_RAG = """###Task Description:
-An instruction (might include an Input inside it), two responses to evaluate (denoted as Response A and Response B), a relevant context to support the evaluation (denoted as Relevant Context), and an evaluation criteria are given.
-1. Write a detailed feedback that assess the quality of the two responses strictly based on the given evaluation criteria, not evaluating in general. Refer to the given context when writing the feedback and making an assessment.
-2. Make comparisons between Response A, Response B, and the Reference Answer. Instead of examining Response A and Response B separately, go straight to the point and mention about the commonalities and differences between them.
-3. After writing the feedback, indicate the better response, either "A" or "B".
-4. The output format should look as follows: "Feedback: (write a feedback for criteria) [RESULT] (Either "A" or "B")"
-5. Please do not generate any other opening, closing, and explanations.
-
-###Instruction:
-{instruction}
-
-###Response A:
-{response_A}
-
-###Response B:
-{response_B}
-
-###Relevant Context:
-{relevant_context}
-
-###Score Rubric:
-{rubric}
-
-###Feedback: """
+# ###Feedback: """
 
 
 SCORE_RUBRIC_TEMPLATE = """

@@ -16,7 +16,7 @@ from .utils import async_batch_completions_with_retries, batch_completions_with_
 # TODO: Add a general parameter class for all types of models
 
 
-class PrometheusEval:
+class AtlaEval:
     def __init__(
         self,
         model,
@@ -187,7 +187,8 @@ class PrometheusEval:
                 reference_answer=reference_answer,
             )
             messages = [
-                {"role": "system", "content": ABS_SYSTEM_PROMPT},
+                # HACK: Atla does not have a system prompt
+                # {"role": "system", "content": ABS_SYSTEM_PROMPT},
                 {"role": "user", "content": content},
             ]
             if hasattr(self.model, "validate_vllm"):
@@ -253,7 +254,8 @@ class PrometheusEval:
                 reference_answer=reference_answer,
             )
             messages = [
-                {"role": "system", "content": REL_SYSTEM_PROMPT},
+                # HACK: Atla does not have a system prompt
+                # {"role": "system", "content": REL_SYSTEM_PROMPT},
                 {"role": "user", "content": content},
             ]
             if hasattr(self.model, "validate_vllm"):

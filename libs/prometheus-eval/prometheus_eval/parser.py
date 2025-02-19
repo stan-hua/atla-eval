@@ -6,6 +6,7 @@ def _parse_output_absolute(output):
         (?:                        # Start of non-capturing group
             \[RESULT\]|\[SCORE\]|   # Match [RESULT] or [SCORE]
             Score:?|score:?|        # Match Score: or score:
+            \*\*Result:\*\*|       # HACK: Match **Result:** for Atla
             Result:?|\[Result\]:?|  # Match Result: or [Result]:
             score\s+of              # Match "score of"
         )                           # End of non-capturing group
@@ -35,6 +36,7 @@ def _parse_output_relative(output):
         (?:                                # Start of non-capturing group
             \[RESULT\]|\[RESULT:\s*|        # Match [RESULT] or [RESULT:
             \[Response\s+|                  # Match [Response
+            \*\*Result:\*\*|                # HACK: Match **Result:** for Atla
             \[Result\](?:\s+Response)?|     # Match [Result] or [Result] Response
             \[Result:\s*|                   # Match [Result:
             (?:^|\n)Result:?\s*             # Match Result: at the start of a line
