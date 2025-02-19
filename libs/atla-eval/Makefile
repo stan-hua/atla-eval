@@ -1,6 +1,6 @@
 .PHONY: style
 
-check_dirs := prometheus_eval tests
+check_dirs := atla_eval tests
 
 style:
 	isort $(check_dirs)

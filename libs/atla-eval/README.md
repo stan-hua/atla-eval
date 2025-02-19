@@ -1,6 +1,6 @@
 <h1 align="center">🔥 Atla-Eval (Ported from Prometheus-Eval)🔥</h1>
 
-Code repurposed from [Atla-Eval](https://github.com/prometheus-eval/)
+Code repurposed from [Prometheus-Eval](https://github.com/prometheus-eval/)
 
 
 ## 🔧 Installation
