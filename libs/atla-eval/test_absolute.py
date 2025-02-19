@@ -1,8 +1,10 @@
 from atla_eval import AtlaEval
 from atla_eval.prompts import ABSOLUTE_PROMPT, SCORE_RUBRIC_TEMPLATE
+from atla_eval.vllm import VLLM
 
+model = VLLM(model="AtlaAI/Selene-1-Mini-Llama-3.1-8B")
 judge = AtlaEval(
-    model_id="AtlaAI/Selene-1-Mini-Llama-3.1-8B",
+    model=model,
     absolute_grade_template=ABSOLUTE_PROMPT,
 )
 
