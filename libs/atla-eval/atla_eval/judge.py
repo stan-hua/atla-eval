@@ -48,16 +48,19 @@ class AtlaEval:
         """
         From filled prompt, convert it into llama-2 conversation prompt
         """
-        conv = get_conv_template("mistral")
+        # conv = get_conv_template("mistral")
+        # for message in messages:
+        #     if message["role"] == "system":
+        #         conv.set_system_message(message["content"])
+        #     elif message["role"] == "user":
+        #         conv.append_message(conv.roles[0], message["content"])
+        # conv.append_message(conv.roles[1], None)
+        # prompt = conv.get_prompt()
 
-        for message in messages:
-            if message["role"] == "system":
-                conv.set_system_message(message["content"])
-            elif message["role"] == "user":
-                conv.append_message(conv.roles[0], message["content"])
+        # Apply chat template
+        tokenizer = self.model.model.get_tokenizer()
+        prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-        conv.append_message(conv.roles[1], None)
-        prompt = conv.get_prompt()
         return prompt
 
     def single_absolute_grade(
